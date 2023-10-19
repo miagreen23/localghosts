@@ -3,14 +3,12 @@ package org.example.resources;
 import org.example.api.DeliveryEmployeeService;
 import org.example.cli.DeliveryEmployee;
 import org.example.client.FailedToCreateException;
+import org.example.client.FailedToDeleteException;
 import org.example.client.ValidationFailedException;
 import io.swagger.annotations.Api;
 import org.example.db.DeliveryEmployeeDAO;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -42,6 +40,18 @@ public class DeliveryEmployeeController {
             return Response.serverError().entity(e.getMessage()).build();
         } catch (ValidationFailedException e){
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+
+    @DELETE
+    @Path("/employee/delivery/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteDeliveryEmployee(@PathParam("id") int id){
+        try {
+            deliveryEmployeeService.deleteDeliveryEmployee(id);
+            return Response.ok().build();
+        } catch (FailedToDeleteException e) {
+            return Response.serverError().entity(e.getMessage()).build();
         }
     }
 }
