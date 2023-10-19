@@ -1,11 +1,10 @@
 package org.example.db;
 
-import org.eclipse.jetty.server.Authentication;
 import org.example.cli.DeliveryEmployee;
 import org.example.client.FailedToCreateException;
+import org.example.client.FailedToGetException;
 import org.example.client.FailedToDeleteException;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -102,6 +101,48 @@ public class DeliveryEmployeeDAO {
     }
 
     /**
+     * get delivery employee information by specified id.
+     * @param id employee id of delivery employee
+     * @return delivery employee object. returns null if no employee returned i.e. employee does not exist
+     */
+    public DeliveryEmployee getDeliveryEmployeeById(int id) throws FailedToGetException {
+        System.out.println(id);
+        try {
+            // establish connection with database
+            Connection c = databaseConnector.getConnection();
+
+            // string sql statement
+            String sqlString = "SELECT employee_id, first_name, last_name, salary, bank_account_number, national_insurance_number FROM employee WHERE employee_id = ?";
+
+            // prepare sql statement
+            PreparedStatement statementEmployee = c.prepareStatement(sqlString);
+
+            // set employee id to specified id
+            statementEmployee.setInt(1, id);
+
+            // execute sql statement
+            ResultSet resultSet = statementEmployee.executeQuery();
+
+            // return order with returned data
+            while (resultSet.next()) {
+                return new DeliveryEmployee(
+                        resultSet.getInt("employee_id"),
+                        resultSet.getString("first_name"),
+                        resultSet.getString("last_name"),
+                        resultSet.getDouble("salary"),
+                        resultSet.getString("bank_account_number"),
+                        resultSet.getString("national_insurance_number")
+                );
+            }
+            // return null if resultSet is empty
+            return null;
+
+        } catch (SQLException e) {
+            throw new FailedToGetException(e.getMessage());
+        }
+    }
+
+    /** Attempts to delete a delivery employee from the database
      * Attempts to delete a delivery employee from the database
      * @param id the id of the delivery employee to delete
      * @throws FailedToDeleteException Thrown if the database returns an error during the deletion.
