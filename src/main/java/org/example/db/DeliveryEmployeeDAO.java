@@ -2,6 +2,7 @@ package org.example.db;
 
 import org.example.cli.DeliveryEmployee;
 import org.example.client.FailedToCreateException;
+import org.example.client.FailedToUpdateEmployeeException;
 import org.example.client.FailedToGetException;
 
 import javax.swing.plaf.nimbus.State;
@@ -99,6 +100,35 @@ public class DeliveryEmployeeDAO {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Updates delivery employee name, salary and bank account number in DB. Uses specified delivery employee ID to
+     * verify which employee to update
+     * @param id
+     * @param deliveryEmployee
+     * @throws FailedToUpdateEmployeeException
+     */
+    public void updateDeliveryEmployee(int id, DeliveryEmployee deliveryEmployee) throws FailedToUpdateEmployeeException {
+        try {
+            Connection c = databaseConnector.getConnection();
+
+        String updateStatement = "UPDATE employee SET first_name = ?, last_name = ?, salary = ?, bank_account_number = ? WHERE employee_id = ?";
+
+        PreparedStatement st = c.prepareStatement(updateStatement);
+
+        st.setString(1, deliveryEmployee.getFirstName());
+        st.setString(2, deliveryEmployee.getLastName());
+        st.setDouble(3, deliveryEmployee.getSalary());
+        st.setString(4, deliveryEmployee.getBankAccountNumber());
+        st.setInt(5, id);
+
+        st.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new FailedToUpdateEmployeeException(e.getMessage());
+    }
+
+}
 
     /**
      * get delivery employee information by specified id.

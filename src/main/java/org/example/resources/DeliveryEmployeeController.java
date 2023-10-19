@@ -4,6 +4,7 @@ import org.example.api.DeliveryEmployeeService;
 import org.example.cli.DeliveryEmployee;
 import org.example.client.DoesNotExistException;
 import org.example.client.FailedToCreateException;
+import org.example.client.FailedToUpdateEmployeeException;
 import org.example.client.FailedToGetException;
 import org.example.client.ValidationFailedException;
 import io.swagger.annotations.Api;
@@ -67,4 +68,27 @@ public class DeliveryEmployeeController {
         }
     }
 
+
+    /**
+     * PUT route to update a specified delivery employee's name, salary and bank account details
+     * @param id
+     * @param deliveryEmployee
+     * @return a Response depending on outcome of PUT
+     */
+    @PUT
+    @Path("/employee/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateDeliveryEmployee(@PathParam("id") int id, DeliveryEmployee deliveryEmployee) {
+        try {
+            deliveryEmployeeService.updateDeliveryEmployee(id, deliveryEmployee);
+            return Response.ok().build();
+
+        } catch (ValidationFailedException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+
+        } catch (FailedToUpdateEmployeeException e) {
+            System.err.println(e.getMessage());
+            return Response.serverError().build();
+        }
+    }
 }

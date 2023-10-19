@@ -4,9 +4,12 @@ import org.example.cli.DeliveryEmployee;
 import org.example.client.DoesNotExistException;
 import org.example.client.FailedToCreateException;
 import org.example.client.FailedToGetException;
+import org.example.client.FailedToUpdateEmployeeException;
 import org.example.client.ValidationFailedException;
 import org.example.core.EmployeeValidator;
 import org.example.db.DeliveryEmployeeDAO;
+
+import java.sql.SQLException;
 
 public class DeliveryEmployeeService {
     private DeliveryEmployeeDAO dao;
@@ -28,6 +31,29 @@ public class DeliveryEmployeeService {
             throw new ValidationFailedException(error);
         }
         return dao.createDeliveryEmployee(deliveryEmployee);
+    }
+
+    /**
+     * Attempts to update delivery employee's details, uses specific employee ID
+     * @param id
+     * @param deliveryEmployee
+     * @throws ValidationFailedException
+     * @throws FailedToUpdateEmployeeException
+     */
+    public void updateDeliveryEmployee(int id, DeliveryEmployee deliveryEmployee) throws ValidationFailedException, FailedToUpdateEmployeeException {
+
+        String error = employeeValidator.isValidEmployee(deliveryEmployee);
+
+        if(error != null){
+            throw new ValidationFailedException(error);
+        }
+
+//        DeliveryEmployee deliveryEmployeeToUpdate = dao.getEmployeeById(id);
+//        if (deliveryEmployeeToUpdate == null) {
+//            throw new EmployeeDoesNotExistException();
+//        }
+
+        dao.updateDeliveryEmployee(id, deliveryEmployee);
     }
 
     /**
