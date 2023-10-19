@@ -3,6 +3,7 @@ package org.example;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.example.resources.DeliveryEmployeeController;
 
 public class JavaBeansApplication extends Application<JavaBeansConfiguration> {
 
@@ -24,6 +25,7 @@ public class JavaBeansApplication extends Application<JavaBeansConfiguration> {
     public void run(final JavaBeansConfiguration configuration,
                     final Environment environment) {
         // TODO: implement application
+        environment.jersey().register(new DeliveryEmployeeController());
     }
 
 }
