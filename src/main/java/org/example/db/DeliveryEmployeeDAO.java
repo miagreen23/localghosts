@@ -2,6 +2,7 @@ package org.example.db;
 
 import org.example.cli.DeliveryEmployee;
 import org.example.client.FailedToCreateException;
+import org.example.client.FailedToGetException;
 
 import javax.swing.plaf.nimbus.State;
 import java.sql.*;
@@ -97,5 +98,48 @@ public class DeliveryEmployeeDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * get delivery employee information by specified id.
+     * @param id employee id of delivery employee
+     * @return delivery employee object. returns null if no employee returned i.e. employee does not exist
+     */
+    public DeliveryEmployee getDeliveryEmployeeById(int id) throws FailedToGetException {
+        System.out.println(id);
+        try {
+            // establish connection with database
+            Connection c = databaseConnector.getConnection();
+
+            // string sql statement
+            String sqlString = "SELECT employee_id, first_name, last_name, salary, bank_account_number, national_insurance_number FROM employee WHERE employee_id = ?";
+
+            // prepare sql statement
+            PreparedStatement statementEmployee = c.prepareStatement(sqlString);
+
+            // set employee id to specified id
+            statementEmployee.setInt(1, id);
+
+            // execute sql statement
+            ResultSet resultSet = statementEmployee.executeQuery();
+
+            // return order with returned data
+            while (resultSet.next()){
+                return new DeliveryEmployee(
+                        resultSet.getInt("employee_id"),
+                        resultSet.getString("first_name"),
+                        resultSet.getString("last_name"),
+                        resultSet.getDouble("salary"),
+                        resultSet.getString("bank_account_number"),
+                        resultSet.getString("national_insurance_number")
+                );
+            }
+            // return null if resultSet is empty
+            return null;
+
+        } catch (SQLException e) {
+            throw new FailedToGetException(e.getMessage());
+        }
+
     }
 }
