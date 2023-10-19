@@ -3,6 +3,8 @@ package org.example;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.federecio.dropwizard.swagger.SwaggerBundle;
+import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 import org.example.resources.DeliveryEmployeeController;
 
 public class JavaBeansApplication extends Application<JavaBeansConfiguration> {
@@ -19,6 +21,12 @@ public class JavaBeansApplication extends Application<JavaBeansConfiguration> {
     @Override
     public void initialize(final Bootstrap<JavaBeansConfiguration> bootstrap) {
         // TODO: application initialization
+        bootstrap.addBundle(new SwaggerBundle<JavaBeansConfiguration>() {
+            @Override
+            protected SwaggerBundleConfiguration getSwaggerBundleConfiguration(JavaBeansConfiguration configuration) {
+                return configuration.getSwagger();
+            }
+        });
     }
 
     @Override
