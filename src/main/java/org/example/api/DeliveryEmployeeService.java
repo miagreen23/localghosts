@@ -40,7 +40,7 @@ public class DeliveryEmployeeService {
      * @throws ValidationFailedException
      * @throws FailedToUpdateEmployeeException
      */
-    public void updateDeliveryEmployee(int id, DeliveryEmployee deliveryEmployee) throws ValidationFailedException, FailedToUpdateEmployeeException {
+    public void updateDeliveryEmployee(int id, DeliveryEmployee deliveryEmployee) throws ValidationFailedException, FailedToUpdateEmployeeException, FailedToGetException, DoesNotExistException {
 
         String error = employeeValidator.isValidEmployee(deliveryEmployee);
 
@@ -48,10 +48,10 @@ public class DeliveryEmployeeService {
             throw new ValidationFailedException(error);
         }
 
-//        DeliveryEmployee deliveryEmployeeToUpdate = dao.getEmployeeById(id);
-//        if (deliveryEmployeeToUpdate == null) {
-//            throw new EmployeeDoesNotExistException();
-//        }
+        DeliveryEmployee deliveryEmployeeToUpdate = dao.getDeliveryEmployeeById(id);
+        if (deliveryEmployeeToUpdate == null) {
+            throw new DoesNotExistException();
+        }
 
         dao.updateDeliveryEmployee(id, deliveryEmployee);
     }

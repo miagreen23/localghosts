@@ -89,6 +89,8 @@ public class DeliveryEmployeeController {
         } catch (FailedToUpdateEmployeeException e) {
             System.err.println(e.getMessage());
             return Response.serverError().build();
+        } catch (DoesNotExistException | FailedToGetException e) {
+            throw new RuntimeException(e);
         }
     }
 }
