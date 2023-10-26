@@ -59,7 +59,7 @@ public class DeliveryEmployeeService {
         List<DeliveryEmployee> deliveryEmployeeList = dao.getDeliveryEmployees();
 
         if (deliveryEmployeeList.size() == 0) {
-            throw new DoesNotExistException();
+            return deliveryEmployeeList;
         }
 
         return deliveryEmployeeList;

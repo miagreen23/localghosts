@@ -20,17 +20,15 @@ public class DeliveryEmployeeController {
 
     // Instantiates DeliveryEmployee service, passes through DeliveryEmployee DAO
     DeliveryEmployeeService deliveryEmployeeService = new DeliveryEmployeeService(new DeliveryEmployeeDAO());
-
     // GET route to capture all employees in DB
     @GET
     @Path("/employee/delivery")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllEmployees(){
         try {
-            DeliveryEmployeeDAO employeeDAO = new DeliveryEmployeeDAO();
-            return Response.ok().entity(employeeDAO.getDeliveryEmployees()).build();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return Response.ok().entity(deliveryEmployeeService.getDeliveryEmployees()).build();
+        } catch (SQLException | DoesNotExistException e) {
+            return Response.serverError().build();
         }
     }
 
