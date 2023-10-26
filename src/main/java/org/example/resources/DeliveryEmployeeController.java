@@ -12,6 +12,7 @@ import org.example.db.DeliveryEmployeeDAO;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.sql.SQLException;
 
 @Api("Java beans Kainoos api")
 @Path("/api")
@@ -25,8 +26,12 @@ public class DeliveryEmployeeController {
     @Path("/employee/delivery")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllEmployees(){
-        DeliveryEmployeeDAO employeeDAO = new DeliveryEmployeeDAO();
-        return Response.ok().entity(employeeDAO.getDeliveryEmployeesIds()).build();
+        try {
+            DeliveryEmployeeDAO employeeDAO = new DeliveryEmployeeDAO();
+            return Response.ok().entity(employeeDAO.getDeliveryEmployees()).build();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // POST route to create a new delivery employee in DB

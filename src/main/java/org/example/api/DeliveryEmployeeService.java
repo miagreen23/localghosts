@@ -8,6 +8,9 @@ import org.example.client.ValidationFailedException;
 import org.example.core.EmployeeValidator;
 import org.example.db.DeliveryEmployeeDAO;
 
+import java.sql.SQLException;
+import java.util.List;
+
 public class DeliveryEmployeeService {
     private DeliveryEmployeeDAO dao;
     private EmployeeValidator employeeValidator = new EmployeeValidator();
@@ -48,5 +51,17 @@ public class DeliveryEmployeeService {
         }
 
         return deliveryEmployee;
+    }
+
+    public List<DeliveryEmployee> getDeliveryEmployees() throws DoesNotExistException, SQLException {
+
+        // Call Get ALL DeliveryEmplyoees
+        List<DeliveryEmployee> deliveryEmployeeList = dao.getDeliveryEmployees();
+
+        if (deliveryEmployeeList.size() == 0) {
+            throw new DoesNotExistException();
+        }
+
+        return deliveryEmployeeList;
     }
 }
