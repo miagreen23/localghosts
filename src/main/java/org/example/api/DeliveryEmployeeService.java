@@ -7,7 +7,9 @@ import org.example.client.FailedToCreateException;
 import org.example.client.FailedToGetException;
 import org.example.client.FailedToUpdateEmployeeException;
 import org.example.client.FailedToCreateDeliveryEmployeeException;
+import org.example.client.InvalidDeliveryEmployeeException;
 import org.example.client.ValidationFailedException;
+import org.example.core.DeliveryEmployeeValidator;
 import org.example.core.EmployeeValidator;
 import org.example.db.DeliveryEmployeeDAO;
 
@@ -17,6 +19,8 @@ import java.util.List;
 public class DeliveryEmployeeService {
     private DeliveryEmployeeDAO dao;
     private EmployeeValidator employeeValidator = new EmployeeValidator();
+
+    private DeliveryEmployeeValidator deliveryEmployeeValidator = new DeliveryEmployeeValidator();
 
     public DeliveryEmployeeService(DeliveryEmployeeDAO dao){
         this.dao = dao;
@@ -29,9 +33,15 @@ public class DeliveryEmployeeService {
      * @throws FailedToCreateException
      */
 
-    public int createDeliveryEmployee(DeliveryEmployeeRequest deliveryEmployee) throws FailedToCreateDeliveryEmployeeException {
+    public int createDeliveryEmployee(DeliveryEmployeeRequest deliveryEmployee) throws FailedToCreateDeliveryEmployeeException, InvalidDeliveryEmployeeException {
         DeliveryEmployeeDAO deliveryEmployeeDAO = new DeliveryEmployeeDAO();
         try {
+            String validation = deliveryEmployeeValidator.isValidDeliveryEmployee(deliveryEmployee);
+
+            if (validation != null) {
+                throw new InvalidDeliveryEmployeeException(validation);
+            }
+
             int id = deliveryEmployeeDAO.createDeliveryEmployee(deliveryEmployee);
 
             if (id == -1) {

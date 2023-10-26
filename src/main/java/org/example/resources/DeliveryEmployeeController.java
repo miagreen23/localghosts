@@ -40,6 +40,8 @@ public class DeliveryEmployeeController {
         } catch (FailedToCreateDeliveryEmployeeException e) {
             System.err.println(e.getMessage());
             return Response.serverError().entity(e.getMessage()).build();
+        } catch (InvalidDeliveryEmployeeException e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 
