@@ -12,8 +12,6 @@ public class AuthDAO {
     public boolean validLogin(Login login) {
         try(Connection c = databaseConnector.getConnection()) {
 
-//            ResultSet rs = st.executeQuery("SELECT `password` FROM `user` WHERE username = "
-//                    + login.getUsername());
             String insertStatement = "SELECT `password` FROM `user` WHERE username = ?;";
 
             PreparedStatement st = c.prepareStatement(insertStatement);
