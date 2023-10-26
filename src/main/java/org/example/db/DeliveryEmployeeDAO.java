@@ -1,6 +1,7 @@
 package org.example.db;
 
 import org.example.cli.DeliveryEmployee;
+import org.example.cli.Employee;
 import org.example.client.FailedToCreateException;
 import org.example.client.FailedToUpdateEmployeeException;
 import org.example.client.FailedToGetException;
@@ -80,8 +81,7 @@ public class DeliveryEmployeeDAO {
      * Gets a list of all delivery employee ids in the database
      * @return List of all delivery employees ids
      */
-    public List<Integer> getDeliveryEmployeesIds() {
-        try {
+    public List<DeliveryEmployee> getDeliveryEmployees() throws SQLException {
             Connection conn = DatabaseConnector.getConnection();
             String SQL = "SELECT employee_id, first_name, last_name, salary, bank_account_number, national_insurance_number FROM employee JOIN delivery_employee USING(employee_id)";
 
@@ -89,16 +89,22 @@ public class DeliveryEmployeeDAO {
 
             ResultSet rs = st.executeQuery(SQL);
 
-            List<Integer> employeeIds = new ArrayList<>();
-            while(rs.next()){
-                System.out.println(rs.getInt("employee_id"));
-                employeeIds.add(rs.getInt("employee_id"));
+            List<DeliveryEmployee> employeeList = new ArrayList<>();
+            while(rs.next()) {
+
+                DeliveryEmployee employee = new DeliveryEmployee(
+                        rs.getInt("employee_id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getDouble("salary"),
+                        rs.getString("bank_account_number"),
+                        rs.getString("national_insurance_number")
+                );
+
+                employeeList.add(employee);
             }
 
-            return employeeIds;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+            return employeeList;
     }
 
     /**
