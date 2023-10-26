@@ -2,11 +2,8 @@ package org.example.resources;
 
 import org.example.api.DeliveryEmployeeService;
 import org.example.cli.DeliveryEmployee;
-import org.example.client.DoesNotExistException;
-import org.example.client.FailedToCreateException;
-import org.example.client.FailedToUpdateEmployeeException;
-import org.example.client.FailedToGetException;
-import org.example.client.ValidationFailedException;
+import org.example.cli.DeliveryEmployeeRequest;
+import org.example.client.*;
 import io.swagger.annotations.Api;
 import org.example.db.DeliveryEmployeeDAO;
 
@@ -34,14 +31,12 @@ public class DeliveryEmployeeController {
     @POST
     @Path("/employee/delivery")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createDeliveryEmployee(DeliveryEmployee deliveryEmployee) {
+    public Response createDeliveryEmployee(DeliveryEmployeeRequest deliveryEmployee) {
         try {
             return Response.ok(deliveryEmployeeService.createDeliveryEmployee(deliveryEmployee)).build();
-        } catch (FailedToCreateException e) {
+        } catch (FailedToCreateDeliveryEmployeeException e) {
             System.err.println(e.getMessage());
             return Response.serverError().entity(e.getMessage()).build();
-        } catch (ValidationFailedException e){
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
 

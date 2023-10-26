@@ -1,10 +1,12 @@
 package org.example.api;
 
 import org.example.cli.DeliveryEmployee;
+import org.example.cli.DeliveryEmployeeRequest;
 import org.example.client.DoesNotExistException;
 import org.example.client.FailedToCreateException;
 import org.example.client.FailedToGetException;
 import org.example.client.FailedToUpdateEmployeeException;
+import org.example.client.FailedToCreateDeliveryEmployeeException;
 import org.example.client.ValidationFailedException;
 import org.example.core.EmployeeValidator;
 import org.example.db.DeliveryEmployeeDAO;
@@ -25,12 +27,28 @@ public class DeliveryEmployeeService {
      * @return the created delivery employee id
      * @throws FailedToCreateException
      */
-    public int createDeliveryEmployee(DeliveryEmployee deliveryEmployee) throws FailedToCreateException, ValidationFailedException {
-        String error = employeeValidator.isValidEmployee(deliveryEmployee);
-        if(error != null){
-            throw new ValidationFailedException(error);
+//    public int createDeliveryEmployee(DeliveryEmployeeRequest deliveryEmployee) throws FailedToCreateException, ValidationFailedException {
+//        String error = employeeValidator.isValidEmployee(deliveryEmployee);
+//        if(error != null){
+//            throw new ValidationFailedException(error);
+//        }
+//        return dao.createDeliveryEmployee(deliveryEmployee);
+//    }
+
+    public int createDeliveryEmployee(DeliveryEmployeeRequest deliveryEmployee) throws FailedToCreateDeliveryEmployeeException {
+        try {
+            int id = DeliveryEmployeeDAO.createDeliveryEmployee(deliveryEmployee);
+
+            if (id == -1) {
+                throw new FailedToCreateDeliveryEmployeeException();
+            }
+
+            return id;
+        } catch (FailedToCreateException e){
+            System.err.println(e.getMessage());
+
+            throw new FailedToCreateDeliveryEmployeeException();
         }
-        return dao.createDeliveryEmployee(deliveryEmployee);
     }
 
     /**

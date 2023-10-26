@@ -1,6 +1,7 @@
 package org.example.db;
 
 import org.example.cli.DeliveryEmployee;
+import org.example.cli.DeliveryEmployeeRequest;
 import org.example.client.FailedToCreateException;
 import org.example.client.FailedToUpdateEmployeeException;
 import org.example.client.FailedToGetException;
@@ -13,7 +14,7 @@ import java.util.List;
 public class DeliveryEmployeeDAO {
 
     // create instance of database connector class
-    DatabaseConnector databaseConnector = new DatabaseConnector();
+    static DatabaseConnector databaseConnector = new DatabaseConnector();
 
     /**
      * inserts a new employee into employee table, then adds employee to delivery employee table via employee id
@@ -21,7 +22,7 @@ public class DeliveryEmployeeDAO {
      * @return id of created employee in database
      * @throws SQLException
      */
-    public int createDeliveryEmployee(DeliveryEmployee deliveryEmployee) throws FailedToCreateException {
+    public static int createDeliveryEmployee(DeliveryEmployeeRequest deliveryEmployee) throws FailedToCreateException {
 
         // establish connection with database
         try {
