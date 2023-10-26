@@ -1,6 +1,7 @@
 package org.example.db;
 
 import org.example.cli.DeliveryEmployee;
+import org.example.cli.DeliveryEmployeeRequest;
 import org.example.cli.Employee;
 import org.example.client.FailedToCreateException;
 import org.example.client.FailedToUpdateEmployeeException;
@@ -22,7 +23,7 @@ public class DeliveryEmployeeDAO {
      * @return id of created employee in database
      * @throws SQLException
      */
-    public int createDeliveryEmployee(DeliveryEmployee deliveryEmployee) throws FailedToCreateException {
+    public int createDeliveryEmployee(DeliveryEmployeeRequest deliveryEmployee) throws FailedToCreateException {
 
         // establish connection with database
         try {
