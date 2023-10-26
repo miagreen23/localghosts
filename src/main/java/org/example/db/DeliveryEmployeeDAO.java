@@ -14,7 +14,7 @@ import java.util.List;
 public class DeliveryEmployeeDAO {
 
     // create instance of database connector class
-    static DatabaseConnector databaseConnector = new DatabaseConnector();
+    DatabaseConnector databaseConnector = new DatabaseConnector();
 
     /**
      * inserts a new employee into employee table, then adds employee to delivery employee table via employee id
@@ -22,7 +22,7 @@ public class DeliveryEmployeeDAO {
      * @return id of created employee in database
      * @throws SQLException
      */
-    public static int createDeliveryEmployee(DeliveryEmployeeRequest deliveryEmployee) throws FailedToCreateException {
+    public int createDeliveryEmployee(DeliveryEmployeeRequest deliveryEmployee) throws FailedToCreateException {
 
         // establish connection with database
         try {

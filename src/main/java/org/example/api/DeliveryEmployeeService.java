@@ -27,17 +27,11 @@ public class DeliveryEmployeeService {
      * @return the created delivery employee id
      * @throws FailedToCreateException
      */
-//    public int createDeliveryEmployee(DeliveryEmployeeRequest deliveryEmployee) throws FailedToCreateException, ValidationFailedException {
-//        String error = employeeValidator.isValidEmployee(deliveryEmployee);
-//        if(error != null){
-//            throw new ValidationFailedException(error);
-//        }
-//        return dao.createDeliveryEmployee(deliveryEmployee);
-//    }
 
     public int createDeliveryEmployee(DeliveryEmployeeRequest deliveryEmployee) throws FailedToCreateDeliveryEmployeeException {
+        DeliveryEmployeeDAO deliveryEmployeeDAO = new DeliveryEmployeeDAO();
         try {
-            int id = DeliveryEmployeeDAO.createDeliveryEmployee(deliveryEmployee);
+            int id = deliveryEmployeeDAO.createDeliveryEmployee(deliveryEmployee);
 
             if (id == -1) {
                 throw new FailedToCreateDeliveryEmployeeException();
