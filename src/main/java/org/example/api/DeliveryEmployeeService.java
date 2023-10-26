@@ -4,6 +4,7 @@ import org.example.cli.DeliveryEmployee;
 import org.example.client.DoesNotExistException;
 import org.example.client.FailedToCreateException;
 import org.example.client.FailedToGetException;
+import org.example.client.FailedToUpdateEmployeeException;
 import org.example.client.ValidationFailedException;
 import org.example.core.EmployeeValidator;
 import org.example.db.DeliveryEmployeeDAO;
@@ -34,6 +35,29 @@ public class DeliveryEmployeeService {
     }
 
     /**
+     * Attempts to update delivery employee's details, uses specific employee ID
+     * @param id
+     * @param deliveryEmployee
+     * @throws ValidationFailedException
+     * @throws FailedToUpdateEmployeeException
+     */
+    public void updateDeliveryEmployee(int id, DeliveryEmployee deliveryEmployee) throws ValidationFailedException, FailedToUpdateEmployeeException, FailedToGetException, DoesNotExistException {
+
+        String error = employeeValidator.isValidEmployee(deliveryEmployee);
+
+        if(error != null){
+            throw new ValidationFailedException(error);
+        }
+
+        DeliveryEmployee deliveryEmployeeToUpdate = dao.getDeliveryEmployeeById(id);
+        if (deliveryEmployeeToUpdate == null) {
+            throw new DoesNotExistException();
+        }
+
+        dao.updateDeliveryEmployee(id, deliveryEmployee);
+    }
+
+    /**
      * returns specific delivery employee based on employee id
      * @param id employee id
      * @return delivery employee
@@ -57,11 +81,6 @@ public class DeliveryEmployeeService {
 
         // Call Get ALL DeliveryEmplyoees
         List<DeliveryEmployee> deliveryEmployeeList = dao.getDeliveryEmployees();
-
-        if (deliveryEmployeeList.size() == 0) {
-            return deliveryEmployeeList;
-        }
-
         return deliveryEmployeeList;
     }
 }
