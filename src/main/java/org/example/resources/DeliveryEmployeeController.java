@@ -18,11 +18,12 @@ public class DeliveryEmployeeController {
 
     // Instantiates DeliveryEmployee service, passes through DeliveryEmployee DAO
     DeliveryEmployeeService deliveryEmployeeService = new DeliveryEmployeeService(new DeliveryEmployeeDAO());
+
     // GET route to capture all employees in DB
     @GET
     @Path("/employee/delivery")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllEmployees(){
+    public Response getAllEmployees() {
         try {
             return Response.ok().entity(deliveryEmployeeService.getDeliveryEmployees()).build();
         } catch (SQLException | DoesNotExistException e) {
@@ -47,13 +48,14 @@ public class DeliveryEmployeeController {
 
     /**
      * gets first name, last name, salary, bank account number of a delivery employee based on the employee id
+     *
      * @param id employee id of employee
      * @return id of employee
      */
     @GET
     @Path("/employee/delivery/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getDeliveryEmployeeById(@PathParam("id") int id){
+    public Response getDeliveryEmployeeById(@PathParam("id") int id) {
         try {
             // response 200 ok, return delivery employee id
             return Response.ok(deliveryEmployeeService.getDeliveryEmployeeById(id)).build();
@@ -71,6 +73,7 @@ public class DeliveryEmployeeController {
 
     /**
      * PUT route to update a specified delivery employee's name, salary and bank account details
+     *
      * @param id
      * @param deliveryEmployee
      * @return a Response depending on outcome of PUT
@@ -91,6 +94,20 @@ public class DeliveryEmployeeController {
             return Response.serverError().build();
         } catch (DoesNotExistException | FailedToGetException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @DELETE
+    @Path("/employee/delivery/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteDeliveryEmployee(@PathParam("id") int id) {
+        try {
+            deliveryEmployeeService.deleteDeliveryEmployee(id);
+            return Response.ok().build();
+        } catch (FailedToDeleteException e) {
+            return Response.serverError().entity(e.getMessage()).build();
+        } catch (DoesNotExistException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
 }

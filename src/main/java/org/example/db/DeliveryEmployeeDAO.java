@@ -4,6 +4,7 @@ import org.example.cli.DeliveryEmployee;
 import org.example.cli.DeliveryEmployeeRequest;
 import org.example.cli.Employee;
 import org.example.client.FailedToCreateException;
+import org.example.client.FailedToDeleteException;
 import org.example.client.FailedToUpdateEmployeeException;
 import org.example.client.FailedToGetException;
 
@@ -177,6 +178,19 @@ public class DeliveryEmployeeDAO {
         } catch (SQLException e) {
             throw new FailedToGetException(e.getMessage());
         }
+    }
 
+    /** Attempts to delete a delivery employee from the database
+     * @param id the id of the delivery employee to delete
+     * @throws FailedToDeleteException Thrown if the database returns an error during the deletion.
+     */
+    public void deleteDeliveryEmployee(int id) throws SQLException {
+        Connection conn = DatabaseConnector.getConnection();
+        String SQL = "DELETE employee, delivery_employee FROM delivery_employee" +
+                " LEFT JOIN employee ON employee.employee_id = delivery_employee.employee_id" +
+                " WHERE employee.employee_id = ?";
+        PreparedStatement st = conn.prepareStatement(SQL);
+        st.setInt(1,id);
+        st.executeUpdate();
     }
 }

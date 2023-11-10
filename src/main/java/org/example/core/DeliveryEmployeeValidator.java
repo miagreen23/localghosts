@@ -10,7 +10,7 @@ public class DeliveryEmployeeValidator {
             return "Salary cannot be less than zero";
         }
 
-        if(deliveryEmployee.getBankAccountNumber().length() == 8){
+        if(deliveryEmployee.getBankAccountNumber().length() != 8){
             return "Bank account number length must be 8 provided " + deliveryEmployee.getBankAccountNumber().length();
         }
 
